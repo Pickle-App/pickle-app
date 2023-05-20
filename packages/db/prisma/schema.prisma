@@ -6,12 +6,146 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "mysql"
     url      = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
-model Post {
-    id      String @id @default(cuid())
-    title   String
-    content String
+model Profiles {
+    id Int  @id @default(autoincrement())
+    clerk_user_id Int @unique
+    created_at DateTime @default(now())
+    self_skill_rating Float
+    community_skill_rating Float?
+    bio String? @db.VarChar(500)
+    age Int?
+    city String
+    state States
+    events_created Events[]
+}
+
+model Events {
+    id Int @id @default(autoincrement())
+    created_by Profiles @relation(fields: [creator_id], references: [id])
+    creator_id Int
+    title String
+    description String? @db.VarChar(200)
+    datetime DateTime
+    skill_level Float?
+    location Locations @relation(fields: [location_id], references: [id])
+    location_id Int
+    slots_available Int?
+    private Boolean @default(false)
+    type EventType?
+    created_at DateTime @default(now())
+    invites EventInvites[]
+
+    @@index([creator_id])
+    @@index([location_id])
+    @@index([type])
+    @@index([datetime])
+}
+
+model EventInvites {
+    id Int @id @default(autoincrement())
+    event Events @relation(fields: [event_id], references: [id])
+    event_id Int
+    user_id Int
+    status AttendeeStatus @default(PENDING)
+
+    @@index([event_id])
+    @@index([user_id])
+}
+
+model Locations {
+    id Int @id @default(autoincrement())
+    events Events[]
+    name String
+    city String
+    state String
+    type CourtType?
+    lines Boolean?
+    nets NetType?
+    lights Boolean?
+    validated Boolean?
+}
+
+enum States {
+    ALABAMA
+    ALASKA
+    ARIZONA
+    ARKANSAS
+    CALIFORNIA
+    COLORADO
+    CONNECTICUT
+    DELAWARE
+    FLORIDA
+    GEORGIA
+    HAWAII
+    IDAHO
+    ILLINOIS
+    INDIANA
+    IOWA
+    KANSAS
+    KENTUCKY
+    LOUISIANA
+    MAINE
+    MARYLAND
+    MASSACHUSETTS
+    MICHIGAN
+    MINNESOTA
+    MISSISSIPPI
+    MISSOURI
+    MONTANA
+    NEBRASKA
+    NEVADA
+    NEW_HAMPSHIRE
+    NEW_JERSEY
+    NEW_MEXICO
+    NEW_YORK
+    NORTH_CAROLINA
+    NORTH_DAKOTA
+    OHIO
+    OKLAHOMA
+    OREGON
+    PENNSYLVANIA
+    RHODE_ISLAND
+    SOUTH_CAROLINA
+    SOUTH_DAKOTA
+    TENNESSEE
+    TEXAS
+    UTAH
+    VERMONT
+    VIRGINIA
+    WASHINGTON
+    WEST_VIRGINIA
+    WISCONSIN
+    WYOMING
+}
+
+enum AttendeeStatus {
+    PENDING
+    CONFIRMED
+    DECLINED
+}
+
+enum EventType {
+    MENS_SINGLES
+    WOMENS_SINGLES
+    MIXED_SINGLES
+    MENS_DOUBLES
+    WOMENS_DOUBLES
+    MIXED_DOUBLES
+    OPEN
+}
+
+enum CourtType {
+    INDOOR
+    OUTDOOR
+}
+
+enum NetType {
+    TENNIS
+    PERMANENT
+    TEMPORARY
 }
