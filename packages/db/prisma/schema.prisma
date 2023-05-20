@@ -15,8 +15,8 @@ model Profiles {
     id Int  @id @default(autoincrement())
     clerk_user_id Int @unique
     created_at DateTime @default(now())
-    self_skill_rating Float
-    community_skill_rating Float?
+    self_skill_rating Decimal
+    community_skill_rating Decimal?
     bio String? @db.VarChar(500)
     age Int?
     city String
@@ -31,7 +31,7 @@ model Events {
     title String
     description String? @db.VarChar(200)
     datetime DateTime
-    skill_level Float?
+    skill_level Decimal?
     location Locations @relation(fields: [location_id], references: [id])
     location_id Int
     slots_available Int?
@@ -62,7 +62,7 @@ model Locations {
     events Events[]
     name String
     city String
-    state String
+    state States
     type CourtType?
     lines Boolean?
     nets NetType?
