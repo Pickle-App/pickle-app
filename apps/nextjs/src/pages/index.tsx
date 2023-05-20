@@ -3,9 +3,8 @@ import Head from "next/head";
 import { trpc } from "../utils/trpc";
 import type { inferProcedureOutput } from "@trpc/server";
 import type { AppRouter } from "@pickle-app/api";
-import { useAuth, useClerk } from "@clerk/nextjs";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
 
 const Home: NextPage = () => {
   return (
@@ -36,8 +35,6 @@ const AuthShowcase: React.FC = () => {
     undefined,
     { enabled: !!isSignedIn },
   );
-  const { user } = useUser();
-  console.log();
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
@@ -47,13 +44,22 @@ const AuthShowcase: React.FC = () => {
             {secretMessage && (
               <span>
                 {" "}
-                {secretMessage + " " + user?.firstName}
+                {secretMessage} click the user button!
                 <br />
               </span>
             )}
           </p>
           <div className="flex items-center justify-center">
-            <SignOutButton />
+            <UserButton
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: {
+                    width: "3rem",
+                    height: "3rem",
+                  },
+                },
+              }}
+            />
           </div>
         </>
       )}
@@ -63,18 +69,5 @@ const AuthShowcase: React.FC = () => {
         </p>
       )}
     </div>
-  );
-};
-
-const SignOutButton: React.FC = () => {
-  const { signOut } = useClerk();
-  return (
-    <button
-      onClick={() => {
-        signOut();
-      }}
-    >
-      Sign out
-    </button>
   );
 };

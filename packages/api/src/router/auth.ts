@@ -5,6 +5,6 @@ export const authRouter = router({
     return ctx.auth.session;
   }),
   getSecretMessage: protectedProcedure.query(() => {
-    return "Welcome back ";
+    return "you can see this secret message!";
   }),
 });
