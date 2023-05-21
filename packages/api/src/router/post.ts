@@ -6,7 +6,7 @@ export const profileRouter = router({
   create: protectedProcedure
     .input(
       z.object({
-        clerk_user_id: z.number(),
+        clerk_user_id: z.string(),
         self_skill_rating: z.number(),
         city: z.string(),
         state: z.enum(["WASHINGTON"]),
