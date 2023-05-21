@@ -33,6 +33,7 @@ const Home: NextPage = () => {
             <span className="text-[hsl(280,100%,70%)]">Palisade</span>
           </h1>
           <AuthShowcase />
+          {clerkUserId}
         </div>
       </main>
     </>
