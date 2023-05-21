@@ -1,16 +1,24 @@
 import { SignUp } from "@clerk/nextjs";
+import Head from "next/head";
 
 const SignUpPage = () => (
-  <main className="flex h-screen flex-col items-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-    <div className="flex flex-col items-center justify-center gap-4">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-8">
-        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-          Sign In
-        </h1>
-        <SignUp path="/sign-up" routing="path" signInUrl="/sign-in" />
+  <>
+    <Head>
+      <title>Sign Up</title>
+      <meta name="description" content="Sign up to The Palisades" />
+      <link rel="icon" href="/pickle-icon.png" />
+    </Head>
+    <main className="flex h-screen flex-col items-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+      <div className="flex flex-col items-center justify-center gap-4">
+        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-8">
+          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
+            Sign In
+          </h1>
+          <SignUp path="/sign-up" routing="path" signInUrl="/sign-in" />
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
+  </>
 );
 
 export default SignUpPage;

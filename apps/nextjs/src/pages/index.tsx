@@ -37,7 +37,7 @@ const Home: NextPage = () => {
     <>
       <Head>
         <title>Welcome</title>
-        <meta name="description" content="Welcome to Palisade" />
+        <meta name="description" content="Welcome to The Palisades" />
         <link rel="icon" href="/pickle-icon.png" />
       </Head>
       <main className="flex-grow flex-col items-center overflow-hidden bg-gradient-to-b from-[#6220c0] to-[#15162c] text-white">
