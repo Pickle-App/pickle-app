@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 //Need to detect if user is signed in and redirect based on that
 const useIsSignedInFunc = () => {
@@ -16,6 +17,21 @@ const useIsSignedInFunc = () => {
 const Home: NextPage = () => {
   useIsSignedInFunc();
 
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth > 768); // Adjust the breakpoint as needed
+    };
+
+    handleResize(); // Check initial window size
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
       <Head>
@@ -23,24 +39,52 @@ const Home: NextPage = () => {
         <meta name="description" content="Welcome to Palisade" />
         <link rel="icon" href="/pickle-icon.png" />
       </Head>
-      <main className="flex-grow flex-col items-center overflow-hidden bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <div className="flex h-full flex-col items-center justify-between gap-12 px-4 py-8">
-          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            Welcome to{" "}
-            <span className="text-[hsl(280,100%,70%)]">Palisade</span>
-          </h1>
-          <div>
-            <div className="my-10 flex flex-col items-center justify-center gap-4">
-              <p className="text-center text-2xl text-white">
-                <Link href="/sign-in">Sign In</Link>
-              </p>
-            </div>
-            <div className="flex flex-col items-center justify-center gap-4">
-              <p className="text-center text-2xl text-white">
-                <Link href="/sign-up">Sign Up</Link>
-              </p>
-            </div>
+      <main className="flex-grow flex-col items-center overflow-hidden bg-gradient-to-b from-[#6220c0] to-[#15162c] text-white">
+        <div className="flex h-full flex-col items-center justify-between gap-12 px-8 py-16">
+          <div className="w-full">
+            <h1 className="text-5xl font-extrabold tracking-tight sm:text-7xl">
+              Welcome to <br />
+              <span className="text-7xl sm:text-9xl">The</span>{" "}
+              <span className="text-7xl text-[hsl(280,100%,70%)] sm:text-9xl">
+                Palisades
+              </span>
+            </h1>
           </div>
+          {!!isDesktop && (
+            <div className="flex h-full w-full items-center justify-center">
+              {/* Desktop View */}
+              <div className="flex w-full max-w-[1000px] justify-around">
+                <Link href="/sign-in">
+                  <div className="flex items-center justify-center gap-4 border border-white px-32 py-6 transition-all duration-300 hover:bg-[hsl(280,100%,70%)]">
+                    <p className="text-center text-2xl text-white">Sign In</p>
+                  </div>
+                </Link>
+                <Link href="/sign-up">
+                  <div className="flex items-center justify-center gap-4 border border-white px-32 py-6 transition-all duration-300 hover:bg-[hsl(280,100%,70%)]">
+                    <p className="text-center text-2xl text-white">Sign Up</p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          )}
+          {!isDesktop && (
+            <div className="flex h-full w-full max-w-[450px] flex-col justify-between py-10">
+              {/* Mobile View */}
+              <div></div>
+              <div className="flex flex-col justify-around">
+                <Link href="/sign-in">
+                  <div className="mb-8 flex w-full items-center justify-center gap-4 border border-white py-6 transition-all duration-300 hover:bg-[hsl(280,100%,70%)]">
+                    <p className="text-center text-2xl text-white">Sign In</p>
+                  </div>
+                </Link>
+                <Link href="/sign-up">
+                  <div className="flex w-full items-center justify-center gap-4 border border-white py-6 transition-all duration-300 hover:bg-[hsl(280,100%,70%)]">
+                    <p className="text-center text-2xl text-white">Sign Up</p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </>
