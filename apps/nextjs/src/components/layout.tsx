@@ -8,8 +8,10 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
-      <MenuBar />
-      <div className="">{children}</div>
+      <div className="flex h-screen flex-col">
+        <MenuBar />
+        {children}
+      </div>
       {/* Additional layout components or elements */}
     </>
   );
