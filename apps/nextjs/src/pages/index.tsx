@@ -5,17 +5,19 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-//Need to detect if user is signed in and redirect based on that
-const useIsSignedInFunc = () => {
+const Home: NextPage = () => {
   const { isSignedIn } = useAuth();
   const router = useRouter();
-  if (isSignedIn) {
-    router.push("/app");
-  }
-};
+  const [isLoading, setIsLoading] = useState(true);
 
-const Home: NextPage = () => {
-  useIsSignedInFunc();
+  //Need to detect if user is signed in and redirect based on that
+  useEffect(() => {
+    if (isSignedIn) {
+      router.push("/app");
+    } else {
+      setIsLoading(false);
+    }
+  }, [isSignedIn, router]);
 
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -51,7 +53,13 @@ const Home: NextPage = () => {
               </span>
             </h1>
           </div>
-          {!!isDesktop && (
+          {!!isLoading && (
+            <>
+              <div>Loading...</div>
+              <div></div>
+            </>
+          )}
+          {!!isDesktop && !isLoading && (
             <div className="flex h-full w-full items-center justify-center">
               {/* Desktop View */}
               <div className="flex w-full max-w-[1000px] justify-around">
@@ -68,7 +76,7 @@ const Home: NextPage = () => {
               </div>
             </div>
           )}
-          {!isDesktop && (
+          {!isDesktop && !isLoading && (
             <div className="flex h-full w-full max-w-[450px] flex-col justify-between py-10">
               {/* Mobile View */}
               <div></div>
