@@ -47,7 +47,7 @@ const Home: NextPage = () => {
               </div>
             )}
             {!isSignedIn && (
-              <div className="flex h-5/6 w-full flex-col items-center justify-end">
+              <div className="flex h-5/6 w-full flex-col items-center justify-end py-16">
                 <button className="flex w-full max-w-[450px] items-center justify-center gap-4 border border-white py-6 transition-all duration-300 hover:bg-[hsl(280,100%,70%)]">
                   <Link
                     href="/sign-in"
