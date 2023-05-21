@@ -21,13 +21,14 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth > 768); // Adjust the breakpoint as needed
+      setIsDesktop(window.innerWidth > 768); // Desktop is being definer here as viewport size of 769 and above
     };
 
     handleResize(); // Check initial window size
     window.addEventListener("resize", handleResize);
 
     return () => {
+      //Cleanup after coponent mounte - remove the ebent listener
       window.removeEventListener("resize", handleResize);
     };
   }, []);
