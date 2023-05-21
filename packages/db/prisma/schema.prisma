@@ -13,7 +13,7 @@ datasource db {
 
 model Profiles {
     id Int  @id @default(autoincrement())
-    clerk_user_id Int @unique
+    clerk_user_id String @unique
     created_at DateTime @default(now())
     self_skill_rating Decimal
     community_skill_rating Decimal?
