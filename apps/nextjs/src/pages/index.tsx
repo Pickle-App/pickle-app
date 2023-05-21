@@ -8,6 +8,13 @@ import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 
 const Home: NextPage = () => {
+  const { user } = useUser();
+  const { data: allUserProfiles } = trpc.get.all.useQuery();
+
+  // const { data: allUserProfiles } =
+  // trpc.get.all.useQuery<inferProcedureOutput<AppRouter["get"]["all"]>>();
+  console.log(allUserProfiles?.[0]?.clerk_user_id);
+  console.log(user?.id);
   return (
     <>
       <Head>
