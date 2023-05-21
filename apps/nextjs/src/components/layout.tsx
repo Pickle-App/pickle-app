@@ -25,9 +25,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </>
     );
   }
-
-  // Return null if the user is not signed in
-  return null;
 };
 
 export default Layout;
