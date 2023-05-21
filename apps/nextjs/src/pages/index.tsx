@@ -10,11 +10,15 @@ import { useUser } from "@clerk/nextjs";
 const Home: NextPage = () => {
   const { user } = useUser();
   const { data: allUserProfiles } = trpc.get.all.useQuery();
+  const { data: pickleUserProfile } = trpc.get.byId.useQuery(2);
+  const clerkUserId = user?.id;
+  const pickleProfileClerkId = pickleUserProfile?.clerk_user_id;
 
-  // const { data: allUserProfiles } =
-  // trpc.get.all.useQuery<inferProcedureOutput<AppRouter["get"]["all"]>>();
-  console.log(allUserProfiles?.[0]?.clerk_user_id);
-  console.log(user?.id);
+  if (clerkUserId != pickleProfileClerkId) {
+    console.log(clerkUserId);
+    console.log(pickleProfileClerkId);
+  }
+
   return (
     <>
       <Head>
