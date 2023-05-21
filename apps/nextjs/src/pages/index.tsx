@@ -8,8 +8,8 @@ import { useState, useEffect } from "react";
 const Home: NextPage = () => {
   const { isSignedIn } = useAuth();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
 
+  const [isLoading, setIsLoading] = useState(true);
   //Need to detect if user is signed in and redirect based on that
   useEffect(() => {
     if (isSignedIn) {
@@ -20,7 +20,6 @@ const Home: NextPage = () => {
   }, [isSignedIn, router]);
 
   const [isDesktop, setIsDesktop] = useState(false);
-
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth > 768); // Desktop is being definer here as viewport size of 769 and above
@@ -55,11 +54,13 @@ const Home: NextPage = () => {
           </div>
           {!!isLoading && (
             <>
-              <div>Loading...</div>
+              <div className="flex h-screen w-screen items-center justify-center">
+                Loading...
+              </div>
               <div></div>
             </>
           )}
-          {!!isDesktop && !isLoading && (
+          {!isLoading && !!isDesktop && (
             <div className="flex h-full w-full items-center justify-center">
               {/* Desktop View */}
               <div className="flex w-full max-w-[1000px] justify-around">
@@ -76,7 +77,7 @@ const Home: NextPage = () => {
               </div>
             </div>
           )}
-          {!isDesktop && !isLoading && (
+          {!isLoading && !isDesktop && (
             <div className="flex h-full w-full max-w-[450px] flex-col justify-between py-10">
               {/* Mobile View */}
               <div></div>

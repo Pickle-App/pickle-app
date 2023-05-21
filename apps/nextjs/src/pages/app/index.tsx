@@ -6,6 +6,8 @@ import type { AppRouter } from "@pickle-app/api";
 import { useAuth, useClerk } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const { isSignedIn } = useAuth();
@@ -13,6 +15,18 @@ const Home: NextPage = () => {
   const { data: pickleUserProfile } = trpc.get.byId.useQuery(2); //2 is just an example here to cause it to fail
   const clerkUserId = user?.id;
   const pickleProfileClerkId = pickleUserProfile?.clerk_user_id;
+
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(true);
+  //Need to detect if user is signed in and redirect based on that
+  useEffect(() => {
+    if (!isSignedIn) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [isSignedIn, router]);
 
   //Use this to fetch all profiles
   // const { data: allUserProfiles } = trpc.get.all.useQuery();
@@ -40,6 +54,14 @@ const Home: NextPage = () => {
                 Palisades
               </span>
             </h1>
+            {!!isLoading && (
+              <>
+                <div className="flex h-screen w-screen items-center justify-center">
+                  Loading...
+                </div>
+                <div></div>
+              </>
+            )}
             {!!isSignedIn && (
               <div className="flex h-5/6 flex-col items-center justify-between py-20">
                 <AuthShowcase />
