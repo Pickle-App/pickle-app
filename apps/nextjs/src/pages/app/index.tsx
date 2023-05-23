@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   const { user } = useUser();
   const clerkUserId: string = user?.id ?? "";
   const { data: pickleUserProfile } = trpc.profile.byId.useQuery(clerkUserId); //2 is just an example here to cause it to fail
-  const pickleProfileClerkId = pickleUserProfile?.clerk_user_id;
+  const pickleProfileClerkId = pickleUserProfile?.clerk_user_id ?? null;
 
   const router = useRouter();
 
@@ -33,6 +33,20 @@ const Home: NextPage = () => {
 
   //If there isn't a Clerk Id in our database, make an entry
   if (!pickleProfileClerkId) {
+    //   const data = {
+    //     id: Integer = 1,
+    //     clerk_user_id String,
+    //     created_at DateTime,
+    //     self_skill_rating Decimal,
+    //     community_skill_rating Decimal?,
+    //     bio String?,
+    //     age Int?,
+    //     city String,
+    //     state States,
+    //     events_created Events[]
+    //   }
+
+    // trpc.profile.create.useMutation();
     //Write to database
     console.log(clerkUserId);
     console.log(pickleProfileClerkId);
