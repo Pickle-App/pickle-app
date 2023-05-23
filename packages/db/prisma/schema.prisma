@@ -21,13 +21,13 @@ model Profiles {
     age Int?
     city String
     state States
-    events_created Events[]
+    events_created Events?
 }
 
 model Events {
     id Int @id @default(autoincrement())
     created_by Profiles @relation(fields: [creator_id], references: [id])
-    creator_id Int
+    creator_id Int @unique
     title String
     description String? @db.VarChar(200)
     datetime DateTime
