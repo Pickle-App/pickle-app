@@ -12,8 +12,8 @@ import { useRouter } from "next/router";
 const Home: NextPage = () => {
   const { isSignedIn } = useAuth();
   const { user } = useUser();
-  const { data: pickleUserProfile } = trpc.get.byId.useQuery(2); //2 is just an example here to cause it to fail
-  const clerkUserId = user?.id;
+  const clerkUserId: string = user?.id ?? "";
+  const { data: pickleUserProfile } = trpc.profile.byId.useQuery(clerkUserId); //2 is just an example here to cause it to fail
   const pickleProfileClerkId = pickleUserProfile?.clerk_user_id;
 
   const router = useRouter();
@@ -31,7 +31,7 @@ const Home: NextPage = () => {
   //Use this to fetch all profiles
   // const { data: allUserProfiles } = trpc.get.all.useQuery();
 
-  //If there is Clerk Id in out database, make an entry
+  //If there isn't a Clerk Id in our database, make an entry
   if (!pickleProfileClerkId) {
     //Write to database
     console.log(clerkUserId);
