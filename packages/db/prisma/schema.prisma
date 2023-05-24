@@ -22,6 +22,8 @@ model Profiles {
     city String
     state States
     events_created Events[]
+    skips Int?
+    freshLogin Boolean?
 }
 
 model Events {

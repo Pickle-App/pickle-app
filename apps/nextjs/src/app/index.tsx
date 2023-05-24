@@ -3,16 +3,23 @@ import Head from "next/head";
 import { trpc } from "../utils/trpc";
 import type { inferProcedureOutput } from "@trpc/server";
 import type { AppRouter } from "@pickle-app/api";
-import { useAuth, UserButton } from "@clerk/nextjs";
+import { useAuth, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const { isSignedIn } = useAuth();
-  const router = useRouter();
+  const { user } = useUser();
+  const clerkUserId: string = user?.id ?? "";
 
   if (isSignedIn) {
-    router.push("/app");
+    const { data: userProfile } = trpc.profile.byId.useQuery(clerkUserId);
+    if (userProfile != null) {
+      userProfile.freshLogin;
+      console.log("hey!");
+    } else {
+      console.log("Hi");
+      // user profile doesn't exist at all.
+    }
   }
 
   return (
