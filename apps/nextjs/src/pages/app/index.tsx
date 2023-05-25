@@ -1,56 +1,113 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { trpc } from "../../utils/trpc";
-import type { inferProcedureOutput } from "@trpc/server";
-import type { AppRouter } from "@pickle-app/api";
-import { useAuth, useClerk } from "@clerk/nextjs";
-import { useUser } from "@clerk/nextjs";
-import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useAuth, useClerk, useUser } from "@clerk/nextjs";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { trpc } from "../../utils/trpc";
+import Head from "next/head";
 
-const Home: NextPage = () => {
+enum StatesList {
+  ALABAMA = "ALABAMA",
+  ALASKA = "ALASKA",
+  ARIZONA = "ARIZONA",
+  ARKANSAS = "ARKANSAS",
+  CALIFORNIA = "CALIFORNIA",
+  COLORADO = "COLORADO",
+  CONNECTICUT = "CONNECTICUT",
+  DELAWARE = "DELAWARE",
+  FLORIDA = "FLORIDA",
+  GEORGIA = "GEORGIA",
+  HAWAII = "HAWAII",
+  IDAHO = "IDAHO",
+  ILLINOIS = "ILLINOIS",
+  INDIANA = "INDIANA",
+  IOWA = "IOWA",
+  KANSAS = "KANSAS",
+  KENTUCKY = "KENTUCKY",
+  LOUISIANA = "LOUISIANA",
+  MAINE = "MAINE",
+  MARYLAND = "MARYLAND",
+  MASSACHUSETTS = "MASSACHUSETTS",
+  MICHIGAN = "MICHIGAN",
+  MINNESOTA = "MINNESOTA",
+  MISSISSIPPI = "MISSISSIPPI",
+  MISSOURI = "MISSOURI",
+  MONTANA = "MONTANA",
+  NEBRASKA = "NEBRASKA",
+  NEVADA = "NEVADA",
+  NEW_HAMPSHIRE = "NEW_HAMPSHIRE",
+  NEW_JERSEY = "NEW_JERSEY",
+  NEW_MEXICO = "NEW_MEXICO",
+  NEW_YORK = "NEW_YORK",
+  NORTH_CAROLINA = "NORTH_CAROLINA",
+  NORTH_DAKOTA = "NORTH_DAKOTA",
+  OHIO = "OHIO",
+  OKLAHOMA = "OKLAHOMA",
+  OREGON = "OREGON",
+  PENNSYLVANIA = "PENNSYLVANIA",
+  RHODE_ISLAND = "RHODE_ISLAND",
+  SOUTH_CAROLINA = "SOUTH_CAROLINA",
+  SOUTH_DAKOTA = "SOUTH_DAKOTA",
+  TENNESSEE = "TENNESSEE",
+  TEXAS = "TEXAS",
+  UTAH = "UTAH",
+  VERMONT = "VERMONT",
+  VIRGINIA = "VIRGINIA",
+  WASHINGTON = "WASHINGTON",
+  WEST_VIRGINIA = "WEST_VIRGINIA",
+  WISCONSIN = "WISCONSIN",
+  WYOMING = "WYOMING",
+}
+
+interface Profile {
+  clerk_user_id: string;
+  self_skill_rating: number;
+  community_skill_rating?: number;
+  bio?: string;
+  age?: number;
+  city: string;
+  state: StatesList;
+  setup_skip_count?: number;
+}
+
+const Home: React.FC = () => {
   const { isSignedIn } = useAuth();
   const { user } = useUser();
   const clerkUserId: string = user?.id ?? "";
-  const { data: pickleUserProfile } = trpc.profile.byId.useQuery(clerkUserId); //2 is just an example here to cause it to fail
-  const pickleProfileClerkId = pickleUserProfile?.clerk_user_id ?? null;
 
-  const router = useRouter();
+  const { mutate } = trpc.profile.create.useMutation({
+    onSuccess: () => {
+      setProfileCreated(true);
+      console.log("success");
+    },
+    onError: () => {
+      setProfileCreated(true);
+      console.log("failure");
+    },
+  });
 
-  const [isLoading, setIsLoading] = useState(true);
-  //Need to detect if user is signed in and redirect based on that
+  const [profileCreated, setProfileCreated] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
-    if (!isSignedIn) {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
-  }, [isSignedIn, router]);
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
-  //Use this to fetch all profiles
-  // const { data: allUserProfiles } = trpc.get.all.useQuery();
+  useEffect(() => {
+    const profileInput: Profile = {
+      clerk_user_id: clerkUserId,
+      self_skill_rating: 3.0,
+      bio: "This is Landon's bio",
+      age: 36,
+      city: "Seattle",
+      state: StatesList.WASHINGTON,
+    };
+    mutate(profileInput);
+    setProfileCreated(true);
+  }, [isMounted]);
 
-  //If there isn't a Clerk Id in our database, make an entry
-  if (!pickleProfileClerkId) {
-    //   const data = {
-    //     id: Integer = 1,
-    //     clerk_user_id String,
-    //     created_at DateTime,
-    //     self_skill_rating Decimal,
-    //     community_skill_rating Decimal?,
-    //     bio String?,
-    //     age Int?,
-    //     city String,
-    //     state States,
-    //     events_created Events[]
-    //   }
-
-    // trpc.profile.create.useMutation();
-    //Write to database
-    console.log(clerkUserId);
-    console.log(pickleProfileClerkId);
-  }
   return (
     <>
       <Head>
@@ -68,14 +125,6 @@ const Home: NextPage = () => {
                 Palisades
               </span>
             </h1>
-            {!!isLoading && (
-              <>
-                <div className="flex h-screen w-screen items-center justify-center">
-                  Loading...
-                </div>
-                <div></div>
-              </>
-            )}
             {!!isSignedIn && (
               <div className="flex h-5/6 flex-col items-center justify-between py-20">
                 <AuthShowcase />
@@ -101,8 +150,6 @@ const Home: NextPage = () => {
     </>
   );
 };
-
-export default Home;
 
 const AuthShowcase: React.FC = () => {
   const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery();
@@ -140,3 +187,5 @@ const SignOutButton: React.FC = () => {
     </button>
   );
 };
+
+export default Home;
