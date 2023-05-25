@@ -22,8 +22,8 @@ model Profiles {
     city String
     state States
     events_created Events[]
-    skips Int?
-    freshLogin Boolean?
+    setup_skip_count Int?
+    has_user_profile Boolean?
 }
 
 model Events {
