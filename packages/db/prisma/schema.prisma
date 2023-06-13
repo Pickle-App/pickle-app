@@ -25,6 +25,12 @@ model Profiles {
     events_created Events[]
 }
 
+model Test {
+    id Int  @id @default(autoincrement())
+    content String?
+    userId String?
+}
+
 model Events {
     id Int @id @default(autoincrement())
     created_by Profiles @relation(fields: [creator_id], references: [id])

@@ -106,7 +106,7 @@ const Home: React.FC = () => {
     };
     mutate(profileInput);
     setProfileCreated(true);
-  }, [isMounted]);
+  }, [isMounted, profileCreated, clerkUserId, mutate]);
 
   return (
     <>

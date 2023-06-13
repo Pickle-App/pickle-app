@@ -76,7 +76,24 @@ export const profileRouter = router({
         has_user_profile: z.optional(z.boolean()),
       }),
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       return ctx.prisma.profiles.create({ data: input });
+    }),
+
+  test: publicProcedure
+    .input(
+      z.object({
+        content: z.string(),
+        userId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const test = await ctx.prisma.test.create({
+        data: {
+          content: input.content,
+          userId: input.userId,
+        },
+      });
+      return test;
     }),
 });
