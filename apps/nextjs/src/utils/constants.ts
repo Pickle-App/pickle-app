@@ -1,5 +1,3 @@
-import { Profiles } from "@pickle-app/db";
-
 export enum StatesList {
   ALABAMA = "ALABAMA",
   ALASKA = "ALASKA",
@@ -52,6 +50,7 @@ export enum StatesList {
   WISCONSIN = "WISCONSIN",
   WYOMING = "WYOMING",
 }
+
 export interface profileType {
   clerk_user_id: string;
   self_skill_rating: number;
@@ -63,14 +62,3 @@ export interface profileType {
   setup_skip_count?: number;
   has_user_profile?: boolean;
 }
-export const profileInitialState: Profiles = {
-  clerk_user_id: "",
-  self_skill_rating: 0.0,
-  community_skill_rating: 0.0,
-  bio: "",
-  age: 0,
-  city: "",
-  state: StatesList.WASHINGTON,
-  setup_skip_count: 0,
-  has_user_profile: false,
-};
