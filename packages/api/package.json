@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@pickle-app/db": "*",
-    "@trpc/client": "^10.1.0",
-    "@trpc/server": "^10.1.0",
+    "@trpc/client": "^10.45.0",
+    "@trpc/server": "^10.45.0",
     "superjson": "^1.9.1",
     "zod": "^3.18.0"
   },
