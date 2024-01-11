@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import { useUser } from "@clerk/nextjs";
-import { useState } from "react";
 import { trpc } from "../../utils/trpc";
 import { AppHeaderMenu } from "../../components/HeaderMenu";
 import { useRouter } from "next/router";
@@ -15,7 +14,7 @@ const App: NextPage = () => {
   });
 
   if (isSuccess && !profile) {
-    router.push("/setup-profile");
+    router.push("/create-profile");
   }
 
   return (

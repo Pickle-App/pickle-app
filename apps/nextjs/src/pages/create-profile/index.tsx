@@ -1,5 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { StatesList } from "../../utils/constants";
 import { trpc } from "../../utils/trpc";
@@ -22,14 +23,24 @@ const CreateProfile: NextPage = () => {
     state: StatesList.ALABAMA,
   });
 
-  const { user } = useUser();
+  const router = useRouter();
+  const { user, isSignedIn } = useUser();
   const userId = user?.id ?? "";
+
+  const { isSuccess, data: profile } = trpc.profile.getById.useQuery(userId, {
+    enabled: !!isSignedIn,
+  });
+
+  if (isSuccess && profile) {
+    router.push("/app");
+  }
 
   const createProfile = trpc.profile.create.useMutation();
   const states = Object.keys(StatesList);
 
   const handleChange = (event: { target: { name: string; value: any } }) => {
-    let { name, value } = event.target;
+    const { name } = event.target;
+    let { value } = event.target;
 
     if (name === "self_skill_rating" || name === "age") {
       value = parseFloat(value);
@@ -49,6 +60,13 @@ const CreateProfile: NextPage = () => {
       city: formValues["city"],
       state: formValues["state"],
     });
+
+    if (createProfile.isSuccess) {
+      router.push("/app");
+    }
+    if (createProfile.isError) {
+      console.log("There was an error trying to create profile.");
+    }
   };
 
   return (
