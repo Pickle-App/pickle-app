@@ -10,7 +10,7 @@ const App: NextPage = () => {
   const userId = user?.id ?? "";
 
   const { isSuccess, data: profile } = trpc.profile.getById.useQuery(userId, {
-    enabled: !!isSignedIn,
+    enabled: isSignedIn,
   });
 
   if (isSuccess && !profile) {

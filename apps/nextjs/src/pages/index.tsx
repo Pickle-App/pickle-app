@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { LandingPageHeaderMenu } from "../components/HeaderMenu";
 
-const LandingPage = () => {
+const LandingPage: NextPage = () => {
   return (
     <>
       <Head>
